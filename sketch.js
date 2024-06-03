@@ -4,7 +4,6 @@ MoveNet is developed by TensorFlow:
 https://www.tensorflow.org/hub/tutorials/movenet
 
 */
-
 let video, bodypose, pose, keypoint, detector;
 let poses = [];
 
@@ -70,12 +69,17 @@ function drawSkeleton() {
         line(partA.x, partA.y, partB.x, partB.y);
       }
     }
+
+
     // shoulder to shoulder
     partA = pose.keypoints[5];
     partB = pose.keypoints[6];
     if (partA.score > 0.1 && partB.score > 0.1) {
       line(partA.x, partA.y, partB.x, partB.y);
-      
+      Push()
+        image(bikeImg,partA.x-25,partA.y-75,150,150)
+      Pop()
+
     }
     // hip to hip
     partA = pose.keypoints[11];
@@ -106,13 +110,10 @@ function drawSkeleton() {
         
       }
     }
-    // 获取右眼的坐标并绘制图片
-    let rightEye = pose.keypoints[2];
-    if (rightEye.score > 0.1) {
-      image(bikeImg, rightEye.x - img.width / 2, rightEye.y - img.height / 2);
   }
 }
 }
+
 
 /* Points (view on left of screen = left part - when mirrored)
   0 nose
