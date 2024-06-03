@@ -8,6 +8,10 @@ https://www.tensorflow.org/hub/tutorials/movenet
 let video, bodypose, pose, keypoint, detector;
 let poses = [];
 
+function preload(){	
+	bikeImg= loadImage("bike.gif")
+}
+
 async function init() {
   const detectorConfig = {
     modelType: poseDetection.movenet.modelType.MULTIPOSE_LIGHTNING,
@@ -27,6 +31,7 @@ async function getPoses() {
   if (detector) {
     poses = await detector.estimatePoses(video.elt, {
       maxPoses: 2,
+      //flipHorizontal: true,
     });
   }
   requestAnimationFrame(getPoses);
@@ -46,11 +51,10 @@ async function setup() {
 function draw() {
   image(video, 0, 0);
   drawSkeleton();
-  
-  // Flip horizontal
-  let cam = get();
+  // flip horizontal
+  cam = get();
   translate(cam.width, 0);
-  scale(-1, 1);
+  scale(-1, 1); //反向
   image(cam, 0, 0);
 }
 
@@ -58,52 +62,56 @@ function drawSkeleton() {
   // Draw all the tracked landmark points
   for (let i = 0; i < poses.length; i++) {
     pose = poses[i];
-    
-    // Shoulder to wrist
-    for (let j = 5; j < 9; j++) {
-      if (pose.keypoints[j].score > 0.1 && pose.keypoints[j + 2].score > 0.1) {
-        let partA = pose.keypoints[j];
-        let partB = pose.keypoints[j + 2];
-        line(partA.x, partA.y, partB.x, partB.y);
-      }
-    }
-    
-    // Shoulder to shoulder
-    let partA = pose.keypoints[5];
-    let partB = pose.keypoints[6];
-    if (partA.score > 0.1 && partB.score > 0.1) {
-      line(partA.x, partA.y, partB.x, partB.y);
-    }
-    
-    // Hip to hip
-    partA = pose.keypoints[11];
-    partB = pose.keypoints[12];
-    if (partA.score > 0.1 && partB.score > 0.1) {
-      line(partA.x, partA.y, partB.x, partB.y);
-    }
-    
-    // Shoulders to hips
-    partA = pose.keypoints[5];
-    partB = pose.keypoints[11];
-    if (partA.score > 0.1 && partB.score > 0.1) {
-      line(partA.x, partA.y, partB.x, partB.y);
-    }
-    
-    partA = pose.keypoints[6];
-    partB = pose.keypoints[12];
-    if (partA.score > 0.1 && partB.score > 0.1) {
-      line(partA.x, partA.y, partB.x, partB.y);
-    }
-    
-    // Hip to foot
-    for (let j = 11; j < 15; j++) {
+    // shoulder to wrist
+    for (j = 5; j < 9; j++) {
       if (pose.keypoints[j].score > 0.1 && pose.keypoints[j + 2].score > 0.1) {
         partA = pose.keypoints[j];
         partB = pose.keypoints[j + 2];
         line(partA.x, partA.y, partB.x, partB.y);
       }
     }
+    // shoulder to shoulder
+    partA = pose.keypoints[5];
+    partB = pose.keypoints[6];
+    if (partA.score > 0.1 && partB.score > 0.1) {
+      line(partA.x, partA.y, partB.x, partB.y);
+      
+    }
+    // hip to hip
+    partA = pose.keypoints[11];
+    partB = pose.keypoints[12];
+    if (partA.score > 0.1 && partB.score > 0.1) {
+      line(partA.x, partA.y, partB.x, partB.y);
+      
+    }
+    // shoulders to hips
+    partA = pose.keypoints[5];
+    partB = pose.keypoints[11];
+    if (partA.score > 0.1 && partB.score > 0.1) {
+      line(partA.x, partA.y, partB.x, partB.y);
+      
+    }
+    partA = pose.keypoints[6];
+    partB = pose.keypoints[12];
+    if (partA.score > 0.1 && partB.score > 0.1) {
+      line(partA.x, partA.y, partB.x, partB.y);
+      
+    }
+    // hip to foot
+    for (j = 11; j < 15; j++) {
+      if (pose.keypoints[j].score > 0.1 && pose.keypoints[j + 2].score > 0.1) {
+        partA = pose.keypoints[j];
+        partB = pose.keypoints[j + 2];
+        line(partA.x, partA.y, partB.x, partB.y);
+        
+      }
+    }
+    // 获取右眼的坐标并绘制图片
+    let rightEye = pose.keypoints[2];
+    if (rightEye.score > 0.1) {
+      image(bikeImg, rightEye.x - img.width / 2, rightEye.y - img.height / 2);
   }
+}
 }
 
 /* Points (view on left of screen = left part - when mirrored)
@@ -120,7 +128,7 @@ function drawSkeleton() {
   10 right wrist
   11 left hip
   12 right hip
-  13 left knee
+  13 left kneee
   14 right knee
   15 left foot
   16 right foot
