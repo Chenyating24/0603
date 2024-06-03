@@ -6,10 +6,7 @@ https://www.tensorflow.org/hub/tutorials/movenet
 */
 let video, bodypose, pose, keypoint, detector;
 let poses = [];
-
-function preload(){	
-	bikeImg= loadImage("bike.gif")
-}
+var bikeImg= loadImage("bike.gif")
 
 async function init() {
   const detectorConfig = {
@@ -111,7 +108,6 @@ function drawSkeleton() {
       }
     }
   }
-}
 }
 
 
