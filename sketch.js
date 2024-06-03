@@ -64,6 +64,12 @@ function drawSkeleton() {
         partA = pose.keypoints[j];
         partB = pose.keypoints[j + 2];
         line(partA.x, partA.y, partB.x, partB.y);
+        Push()
+        //image(bikeImg,partA.x-25,partA.y-75,150,150)
+        textSize(40)
+        scale(-1,1)
+        text("408730413,陳雅婷",partA.x-width,part.y-150)
+      Pop()
       }
     }
 
@@ -74,23 +80,28 @@ function drawSkeleton() {
     if (partA.score > 0.1 && partB.score > 0.1) {
       line(partA.x, partA.y, partB.x, partB.y);
       Push()
-        image(bikeImg,partA.x-25,partA.y-75,150,150)
-      Pop()
-
+      //image(bikeImg,partA.x-25,partA.y-75,150,150)
+      //textSize(40)
+      //scale(-1,1)
+      //text("408730413,陳雅婷",partA.x-width,part.y-150)
+    Pop()
     }
+
+
     // hip to hip
     partA = pose.keypoints[11];
     partB = pose.keypoints[12];
     if (partA.score > 0.1 && partB.score > 0.1) {
       line(partA.x, partA.y, partB.x, partB.y);
-      
     }
+
+
     // shoulders to hips
     partA = pose.keypoints[5];
     partB = pose.keypoints[11];
     if (partA.score > 0.1 && partB.score > 0.1) {
       line(partA.x, partA.y, partB.x, partB.y);
-      
+ 
     }
     partA = pose.keypoints[6];
     partB = pose.keypoints[12];
